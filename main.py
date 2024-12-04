@@ -43,11 +43,6 @@ class MyWidget(QMainWindow):
     def create_lenght_map(self):
         self.flag_click_lenght = True
 
-        # self.scene.addItem(self.line)
-        # self.picture_Map.setScene(self.scene)
-        # self.flag_lenght_map = True
-
-
     def mousePressEvent(self, event):
         if event.button() == Qt.MouseButton.LeftButton and self.flag_click_lenght :
             self.lenght_map_coord1 = [event.pos().x(), event.pos().y()]
