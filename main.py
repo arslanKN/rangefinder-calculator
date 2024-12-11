@@ -8,10 +8,11 @@ from PyQt6 import uic
 from PyQt6.QtCore import Qt
 from calculations import distance_calculation
 
+
 class MyWidget(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi('dg.ui', self) # загружаем дизайн
+        uic.loadUi('dg.ui', self)  # загружаем дизайн
         #
         self.load_map.clicked.connect(self.loading_map)
         #
@@ -34,8 +35,7 @@ class MyWidget(QMainWindow):
 
         self.flag_mousemove = True
 
-
-    def loading_map(self):# загрузка изображения
+    def loading_map(self):  # загрузка изображения
         fname = QFileDialog.getOpenFileName(self, "Выбрать изображение", "",
                                             "Image Files (*.png *.jpg *.jpeg *.bmp *.gif);;Все файлы (*)",
                                             )[0]
@@ -50,18 +50,18 @@ class MyWidget(QMainWindow):
         self.status_click_line = True
 
     def paintEvent(self, event):
-        if self.flag_map_picture:# рисование изображения
+        if self.flag_map_picture:  # рисование изображения
             self.qp_map = QPainter(self)
             self.qp_map.drawPixmap(0, 0, self.pixmap_fname)
             self.qp_map.end()
 
-        if self.flag_create_lenght_map:# вызов рисования линии размера карты
+        if self.flag_create_lenght_map:  # вызов рисования линии размера карты
             self.qp_lenght = QPainter(self)
             self.qp_lenght.begin(self)
             self.draw_lenght()
             self.qp_lenght.end()
 
-        if self.flag_create_line_map:# вызов рисования дистанции
+        if self.flag_create_line_map:  # вызов рисования дистанции
             self.qp_line = QPainter(self)
             self.qp_line.begin(self)
             self.draw_line()
@@ -73,14 +73,14 @@ class MyWidget(QMainWindow):
         if self.status_click_line:
             self.flag_create_line_map = True
 
-    def draw_lenght(self):# рисование линии размера карты
+    def draw_lenght(self):  # рисование линии размера карты
         x1, y1 = self.lenght_map_coord1
         x2, y2 = self.lenght_map_coord2
         pen = QPen(Qt.GlobalColor.black, 4)
         self.qp_lenght.setPen(pen)
         self.qp_lenght.drawLine(x1, y1, x2, y2)
 
-    def draw_line(self):# рисование дистанции
+    def draw_line(self):  # рисование дистанции
         x1, y1 = self.line_map_coord1
         x2, y2 = self.line_map_coord2
         pen = QPen(Qt.GlobalColor.red, 4)
@@ -88,14 +88,14 @@ class MyWidget(QMainWindow):
         self.qp_line.drawLine(x1, y1, x2, y2)
 
     def mouseReleaseEvent(self, event):
-        if self.status_click_lenght and event.button() == Qt.MouseButton.LeftButton: # для линии размера карты
+        if self.status_click_lenght and event.button() == Qt.MouseButton.LeftButton:  # для линии размера карты
             self.lenght_map_coord2 = [event.pos().x(), event.pos().y()]
             self.drawf()
             self.update()
             self.status_click_lenght = False
             self.flag_mousemove = True
 
-        if self.status_click_line and event.button() == Qt.MouseButton.LeftButton:# для дистанции
+        if self.status_click_line and event.button() == Qt.MouseButton.LeftButton:  # для дистанции
             self.line_map_coord2 = [event.pos().x(), event.pos().y()]
             self.drawf()
             self.update()
@@ -103,7 +103,7 @@ class MyWidget(QMainWindow):
             self.flag_mousemove = True
 
     def mouseMoveEvent(self, event: QMouseEvent):
-        if self.status_click_lenght and self.flag_mousemove :
+        if self.status_click_lenght and self.flag_mousemove:
             self.lenght_map_coord1 = [event.pos().x(), event.pos().y()]
             self.flag_mousemove = False
 
@@ -122,20 +122,23 @@ class MyWidget(QMainWindow):
             self.drawf()
             self.update_line_map()
 
-    def update_line_map(self):# вывод расстояние до цели
+    def update_line_map(self):  # вывод расстояние до цели
         try:
             self.lenght_map_distance = int(self.lenght_map.toPlainText())
             self.line_map_distance = int(distance_calculation(self.lenght_map_coord1,
-                                                                self.lenght_map_coord2, self.line_map_coord1,
-                                                                self.line_map_coord2, self.lenght_map_distance))
+                                                              self.lenght_map_coord2, self.line_map_coord1,
+                                                              self.line_map_coord2, self.lenght_map_distance))
             self.line_map.setText(f'{self.line_map_distance}')
         except Exception:
             self.line_map.setText('')
 
-    def record_hit(self):
-        pass
-
-
+    def record_hit(self):  # добавление результатов выстрелов
+        if self.sender() == self.button_target_destroyed:
+            pass
+        if self.sender() == self.button_miss:
+            pass
+        if self.sender() == self.button_hit:
+            pass
 
 
 if __name__ == '__main__':
